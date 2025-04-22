@@ -1,4 +1,9 @@
-import { VercelRequest, VercelResponse } from '@vercel/node';
+// Instead of named imports, import the entire package
+import pkg from '@vercel/node';
+
+// Destructure the named exports from the default import
+const { VercelRequest, VercelResponse } = pkg;
+
 import ytdl from 'ytdl-core';
 
 // Download video handler
