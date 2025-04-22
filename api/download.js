@@ -1,12 +1,31 @@
-import pkg from '@vercel/node';
-const { VercelRequest, VercelResponse } = pkg;
+// File: api/download.js
 
-export default async function handler(req = VercelRequest, res = VercelResponse) {
-  try {
-    // Example of returning a simple response
-    res.status(200).json({ message: "Hello, world!" });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Internal Server Error" });
+const ytdl = require('ytdl-core');
+
+module.exports = async (req, res) => {
+  const { url } = req.query;
+
+  if (!url || !ytdl.validateURL(url)) {
+    return res.status(400).json({ error: 'Invalid YouTube URL' });
   }
-}
+
+  try {
+    const info = await ytdl.getInfo(url);
+
+    const format = ytdl.chooseFormat(info.formats, {
+      quality: '18', // mp4 360p — stable
+      filter: 'audioandvideo',
+    });
+
+    if (!format || !format.url) {
+      return res.status(500).json({ error: 'No downloadable format found' });
+    }
+
+    res.setHeader('Content-Disposition', `attachment; filename="video.mp4"`);
+    ytdl(url, { format }).pipe(res);
+
+  } catch (err) {
+    console.error('Download error:', err);
+    res.status(500).json({ error: 'Failed to download video' });
+  }
+};
