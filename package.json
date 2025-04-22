@@ -1,7 +1,10 @@
 {
-    "type": "module",
+    "name": "vercel-youtube-downloader",
+    "version": "1.0.0",
+    "main": "index.js",
+    "type": "commonjs",
     "dependencies": {
-        "vercel": "^41.6.1",
-        "ytdl-core": "^4.11.5"
+      "ytdl-core": "^4.11.2"
     }
-}
+  }
+  
