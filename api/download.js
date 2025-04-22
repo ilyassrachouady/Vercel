@@ -2,9 +2,9 @@ import { VercelRequest, VercelResponse } from '@vercel/node';
 import ytdl from 'ytdl-core';
 
 // Download video handler
-export default async function handler(req: VercelRequest, res: VercelResponse) {
+export default async function handler(req, res) {
   // Get the URL from the request query parameter
-  const videoUrl = req.query.url as string;
+  const videoUrl = req.query.url;
   
   if (!videoUrl || !ytdl.validateURL(videoUrl)) {
     return res.status(400).json({ error: 'Invalid or missing video URL' });
